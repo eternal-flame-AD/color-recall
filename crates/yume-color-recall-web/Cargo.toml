@@ -1,0 +1,20 @@
+[package]
+name = "yume-color-recall-web"
+version = "0.1.0"
+authors = ["eternal-flame-AD <yume@yumechi.jp>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+panic = "unwind"
+
+
+[dependencies]
+wasm-bindgen.workspace = true
+color-recall = { workspace = true }
+rand.workspace = true
+palette.workspace = true
+
+getrandom = { version = "0.2.15", features = ["js"] }
+js-sys = "0.3.72"
+
