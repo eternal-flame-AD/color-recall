@@ -368,6 +368,14 @@ function Game() {
           (<Step4 reset={doReset} lastModel={lastModel} recall_ms={recallTime} />)
           : null
       }
+      <Divider sx={{ margin: 2 }} />
+      <Typography variant="body2">
+        Powered by &nbsp;
+        <Link href="https://crates.io/crates/palette" target="_blank" rel="noreferrer">
+          palette (crates.io)
+        </Link> &nbsp;
+        Licensed under the Apache License, Version 2.0
+      </Typography>
     </Box>
   )
 }
