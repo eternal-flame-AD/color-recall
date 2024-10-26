@@ -137,5 +137,4 @@ if (url.searchParams.has('lang')) {
     i18next.changeLanguage('ja');
 }
 
-
 export default i18next;
