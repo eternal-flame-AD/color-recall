@@ -1,10 +1,7 @@
 name: Web
 
 on:
-  workflow_run:
-    workflows: ["Rust Check"]
-    types:
-      - completed
+  push:
     branches:
       - main
 
