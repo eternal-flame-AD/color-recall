@@ -4,7 +4,7 @@ use color_recall::game::{
     chooser_convert, ColorChallenge, ColorChooser, ExcludeReason, HSLChooser, HSVChooser,
     LABChooser, LCHChooser, RGBChooser, Slider, XYZChooser,
 };
-use palette::Srgb;
+use palette::{Darken, Lighten, Srgb};
 use rand::rngs::OsRng;
 use wasm_bindgen::prelude::*;
 
@@ -320,6 +320,20 @@ static GAME_CONTEXT: RwLock<Option<GameContext>> = RwLock::new(None);
 pub fn init_game() {
     let mut game = GAME_CONTEXT.write().unwrap();
     *game = Some(GameContext::new());
+}
+
+#[wasm_bindgen]
+pub fn darken_target_color(by: f32) -> String {
+    let mut game = GAME_CONTEXT.write().unwrap();
+    let tg = game.as_mut().unwrap().game.target_color();
+
+    let target = if by > 0.0 {
+        tg.darken(by)
+    } else {
+        tg.lighten(-by)
+    };
+
+    srgb_to_css(&target)
 }
 
 #[wasm_bindgen]

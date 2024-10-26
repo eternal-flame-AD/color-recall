@@ -16,6 +16,8 @@ A simple color recall game made with Rust and built as WebAssembly. Designed to 
 
 - 6 color spaces that can be switched between on the fly, ranging from the most common to the most technical (sRGB, HSV, HSL, CIELAB, CIEXYZ, CIELCH).
   Hint: sRGB is most common, HSV is usually what you see on color pickers, LAB is the most technical, XYZ is just hard mode, LCH should be the easiest to use if you know how to use it.
+- Colors with extreme brightness or low saturation are not tested due to low accuracy and high dependency on the display used. This is to ensure that the game is fair for everyone.
+  If you choose a color outside of this range, a warning will be shown suggesting you to pick a different color.
 
 ## Share your score
 

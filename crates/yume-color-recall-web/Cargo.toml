@@ -6,8 +6,6 @@ edition = "2018"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-panic = "unwind"
-
 
 [dependencies]
 wasm-bindgen.workspace = true

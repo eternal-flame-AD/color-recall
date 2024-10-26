@@ -5,7 +5,8 @@ import game_wasm, {
   , current_color_css, available_models, model_name, model_sliders, switch_model, update_slider,
   model_info_link,
   compute_score,
-  color_acceptable
+  color_acceptable,
+  darken_target_color
 } from '../../pkg'
 import './i18n'
 import { Alert, Box, Button, Divider, FormControl, FormGroup, FormLabel, Link, MenuItem, Paper, Radio, RadioGroup, Select, Slider, Stack, Typography } from '@mui/material'
@@ -24,6 +25,28 @@ function ColorSampleBlock(props: { color: string, size: number, showText?: boole
     >
       {props.showText ? <Typography variant="body1">{props.color}</Typography> : null}
     </Box>
+  )
+}
+
+function GradientScale(props: { size: number, from: string, to: string }) {
+  return (
+    <Box sx={{
+      backgroundImage: `linear-gradient(to right, ${props.from}, ${props.to})`,
+      width: props.size * 4, height: props.size,
+      display: 'inline-block',
+      align: 'center',
+    }} />
+  )
+}
+
+function RainbowScale(props: { size: number }) {
+  return (
+    <Box sx={{
+      backgroundImage: 'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)',
+      width: props.size * 4, height: props.size,
+      display: 'inline-block',
+      align: 'center',
+    }} />
   )
 }
 
@@ -258,11 +281,31 @@ function Step2(props: { next: () => void, reset: () => void }) {
 
 function Step1(props: { next: () => void, reset: () => void }) {
   const { t } = useTranslation();
+  const [showCalibration, setShowCalibration] = useState(true)
   return (
     <Box>
       <Typography variant="h4">{t('step_1_memorization')}</Typography>
       <Typography variant="h6">{t('step_1_instructions')}</Typography>
       <ColorSampleBlock color={target_color_css()} size={100} />
+      <Divider sx={{ margin: 2 }} />
+      <Typography variant="h6">{t('calibration')}</Typography>
+      <Typography variant="body1">
+        {t('calibration_instructions')}</Typography>
+      <Button variant="contained" onClick={() => setShowCalibration(!showCalibration)} sx={{ margin: 1 }}>
+        {t('calibration_toggle')}
+      </Button>
+      <Divider sx={{ margin: 2 }} />
+      {
+        showCalibration ?
+          (
+            <>
+              <RainbowScale size={150} />
+              <Divider sx={{ margin: 2 }} />
+              <GradientScale size={150} from={darken_target_color(-0.25)} to={darken_target_color(0.25)} />
+            </>
+          ) : null
+      }
+
       <Divider sx={{ margin: 2 }} />
       <NextBtn next={props.next} reset={props.reset} />
     </Box>

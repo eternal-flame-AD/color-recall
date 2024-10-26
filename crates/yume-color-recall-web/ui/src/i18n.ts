@@ -23,6 +23,9 @@ const resources = {
             'time_taken_recall': 'Time Taken to Recall (unscored)',
             'btn_next': 'Next',
             'btn_reset': 'Reset',
+            'calibration': 'Calibration',
+            'calibration_toggle': 'Show/Hide Calibration Helper',
+            'calibration_instructions': 'For best results please disable auto brightness and adjust your screen brightness to maximize contrast.',
             'unacceptable': (reason: string) => {
                 switch (reason) {
                     case 'too_bright':
@@ -59,6 +62,9 @@ const resources = {
             'time_taken_recall': '回忆所用时间（不计分）',
             'btn_next': '下一步',
             'btn_reset': '重置',
+            'calibration': '校准',
+            'calibration_toggle': '显示/隐藏校准助手',
+            'calibration_instructions': '为了获得最佳效果，请关闭自动亮度并调整屏幕亮度以最大化对比度。',
             'unacceptable': (reason: string) => {
                 switch (reason) {
                     case 'too_bright':
@@ -94,6 +100,9 @@ const resources = {
             'time_taken_recall': 'リコールにかかった時間（スコア対象外）',
             'btn_next': '次へ',
             'btn_reset': 'リセット',
+            'calibration': 'キャリブレーション',
+            'calibration_toggle': 'キャリブレーションヘルパーを表示/非表示',
+            'calibration_instructions': '最良の結果を得るために、自動輝度を無効にして画面輝度を調整して、コントラストを最大化してください。',
             'unacceptable': (reason: string) => {
                 switch (reason) {
                     case 'too_bright':
