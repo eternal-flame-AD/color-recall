@@ -34,6 +34,8 @@ const resources = {
                         return 'Too Dark';
                     case 'low_saturation':
                         return 'Low Saturation';
+                    case 'high_saturation':
+                        return 'High Saturation';
                     default:
                         return 'Unacceptable';
                 }
@@ -73,6 +75,8 @@ const resources = {
                         return '太暗';
                     case 'low_saturation':
                         return '饱和度太低';
+                    case 'high_saturation':
+                        return '饱和度太高';
                     default:
                         return '不可接受';
                 }
@@ -111,6 +115,8 @@ const resources = {
                         return '暗すぎる';
                     case 'low_saturation':
                         return '彩度が低い';
+                    case 'high_saturation':
+                        return '彩度が高い';
                     default:
                         return '受け入れられない';
                 }

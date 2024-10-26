@@ -343,6 +343,7 @@ pub fn color_acceptable() -> Option<String> {
     match ColorChallenge::is_excluded(&srgb.0.as_srgb(&srgb.1)) {
         None => None,
         Some(ExcludeReason::LowSaturation) => Some("low_saturation".to_string()),
+        Some(ExcludeReason::HighSaturation) => Some("high_saturation".to_string()),
         Some(ExcludeReason::TooBright) => Some("too_bright".to_string()),
         Some(ExcludeReason::TooDark) => Some("too_dark".to_string()),
     }

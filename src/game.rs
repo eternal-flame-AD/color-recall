@@ -38,6 +38,7 @@ pub enum ExcludeReason {
     TooDark,
     TooBright,
     LowSaturation,
+    HighSaturation,
 }
 
 impl Display for ExcludeReason {
@@ -46,6 +47,7 @@ impl Display for ExcludeReason {
             ExcludeReason::TooDark => write!(f, "Too dark"),
             ExcludeReason::TooBright => write!(f, "Too bright"),
             ExcludeReason::LowSaturation => write!(f, "Low saturation"),
+            ExcludeReason::HighSaturation => write!(f, "High saturation"),
         }
     }
 }
@@ -59,8 +61,10 @@ impl ColorChallenge {
             return Some(ExcludeReason::TooBright);
         }
         let hsv: Hsv = (*color).into_color();
-        if hsv.saturation < 0.1 {
+        if hsv.saturation < 0.15 {
             return Some(ExcludeReason::LowSaturation);
+        } else if hsv.saturation > 0.9 {
+            return Some(ExcludeReason::HighSaturation);
         }
         None
     }
