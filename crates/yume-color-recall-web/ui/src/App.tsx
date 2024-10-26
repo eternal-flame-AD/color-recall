@@ -298,6 +298,7 @@ function Game() {
   return (
     <Box>
       <Typography variant="h2">{t('title')}</Typography>
+      <Typography variant="h6"><Link href="https://github.com/eternal-flame-AD/color-recall" target="_blank" rel="noreferrer">GitHub/README</Link></Typography>
       <LanguagePicker />
       <Divider sx={{ margin: 2 }} />
       {
