@@ -9,5 +9,14 @@ export default defineConfig({
     fs: {
       allow: ['../']
     }
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: './index.html',
+        zh: './zh.html',
+        ja: './ja.html'
+      }
+    }
   }
 })
