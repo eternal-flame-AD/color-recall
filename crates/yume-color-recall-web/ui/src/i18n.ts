@@ -127,4 +127,15 @@ i18next.use(initReactI18next).init({
     },
 });
 
+const url = new URL(window.location.href);
+
+if (url.searchParams.has('lang')) {
+    i18next.changeLanguage(url.searchParams.get('lang')!);
+} else if (url.pathname.endsWith('/zh.html')) {
+    i18next.changeLanguage('zh');
+} else if (url.pathname.endsWith('/ja.html')) {
+    i18next.changeLanguage('ja');
+}
+
+
 export default i18next;
