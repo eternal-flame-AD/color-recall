@@ -1,8 +1,8 @@
 use std::{backtrace, sync::RwLock};
 
 use color_recall::game::{
-    chooser_convert, ColorChallenge, ColorChooser, HSLChooser, HSVChooser, LABChooser, RGBChooser,
-    Slider, XYZChooser,
+    chooser_convert, ColorChallenge, ColorChooser, ExcludeReason, HSLChooser, HSVChooser,
+    LABChooser, RGBChooser, Slider, XYZChooser,
 };
 use palette::Srgb;
 use rand::rngs::OsRng;
@@ -301,6 +301,18 @@ static GAME_CONTEXT: RwLock<Option<GameContext>> = RwLock::new(None);
 pub fn init_game() {
     let mut game = GAME_CONTEXT.write().unwrap();
     *game = Some(GameContext::new());
+}
+
+#[wasm_bindgen]
+pub fn color_acceptable() -> Option<String> {
+    let game = GAME_CONTEXT.read().unwrap();
+    let srgb = &game.as_ref().unwrap().slider_srgb;
+    match ColorChallenge::is_excluded(&srgb.0.as_srgb(&srgb.1)) {
+        None => None,
+        Some(ExcludeReason::LowSaturation) => Some("low_saturation".to_string()),
+        Some(ExcludeReason::TooBright) => Some("too_bright".to_string()),
+        Some(ExcludeReason::TooDark) => Some("too_dark".to_string()),
+    }
 }
 
 #[wasm_bindgen]

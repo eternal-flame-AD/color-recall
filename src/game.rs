@@ -33,6 +33,7 @@ pub struct ColorChallenge {
     target: Srgb,
 }
 
+#[derive(Debug, Clone, Copy)]
 pub enum ExcludeReason {
     TooDark,
     TooBright,
@@ -198,7 +199,7 @@ impl ColorChooser<f32> for HSVChooser {
     fn from_srgb(srgb: Srgb) -> Box<[Slider<f32>]> {
         let hsv: Hsv = srgb.into_color();
         vec![
-            Slider::new_linear("H", hsv.hue.into(), 0.0, 360.0),
+            Slider::new_linear("H", hsv.hue.into_positive_degrees(), 0.0, 360.0),
             Slider::new_linear("S", hsv.saturation, 0.0, 1.0),
             Slider::new_linear("V", hsv.value, 0.0, 1.0),
         ]
@@ -246,7 +247,7 @@ impl ColorChooser<f32> for HSLChooser {
         let hsl: Hsl = srgb.into_color();
 
         vec![
-            Slider::new_linear("H", hsl.hue.into(), 0.0, 360.0),
+            Slider::new_linear("H", hsl.hue.into_positive_degrees(), 0.0, 360.0),
             Slider::new_linear("S", hsl.saturation, 0.0, 1.0),
             Slider::new_linear("L", hsl.lightness, 0.0, 1.0),
         ]
