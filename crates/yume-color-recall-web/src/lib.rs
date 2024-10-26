@@ -2,7 +2,7 @@ use std::{backtrace, sync::RwLock};
 
 use color_recall::game::{
     chooser_convert, ColorChallenge, ColorChooser, ExcludeReason, HSLChooser, HSVChooser,
-    LABChooser, RGBChooser, Slider, XYZChooser,
+    LABChooser, LCHChooser, RGBChooser, Slider, XYZChooser,
 };
 use palette::Srgb;
 use rand::rngs::OsRng;
@@ -27,6 +27,7 @@ pub struct GameContext {
     slider_hsl: (HSLChooser, Box<[Slider<f32>]>),
     slider_lab: (LABChooser, Box<[Slider<f32>]>),
     slider_xyz: (XYZChooser, Box<[Slider<f32>]>),
+    slider_lch: (LCHChooser, Box<[Slider<f32>]>),
 }
 
 fn srgb_to_css(input: &Srgb) -> String {
@@ -103,6 +104,7 @@ impl GameContext {
             slider_hsl: (HSLChooser::default(), HSLChooser::default().init_sliders()),
             slider_lab: (LABChooser::default(), LABChooser::default().init_sliders()),
             slider_xyz: (XYZChooser::default(), XYZChooser::default().init_sliders()),
+            slider_lch: (LCHChooser::default(), LCHChooser::default().init_sliders()),
         }
     }
 
@@ -117,6 +119,7 @@ impl GameContext {
             "hsl" => self.slider_hsl.0.as_srgb(&self.slider_hsl.1),
             "lab" => self.slider_lab.0.as_srgb(&self.slider_lab.1),
             "xyz" => self.slider_xyz.0.as_srgb(&self.slider_xyz.1),
+            "lch" => self.slider_lch.0.as_srgb(&self.slider_lch.1),
             _ => Srgb::new(0.0, 0.0, 0.0),
         };
 
@@ -124,7 +127,7 @@ impl GameContext {
     }
 
     pub fn available_models(&self) -> Vec<String> {
-        ["srgb", "hsv", "hsl", "lab", "xyz"]
+        ["srgb", "hsv", "hsl", "lab", "xyz", "lch"]
             .iter()
             .map(|s| s.to_string())
             .collect()
@@ -137,6 +140,7 @@ impl GameContext {
             "hsl" => "HSL",
             "lab" => "CIELAB",
             "xyz" => "CIEXYZ",
+            "lch" => "CIELCH",
             _ => "Unknown",
         }
         .to_string()
@@ -150,6 +154,7 @@ impl GameContext {
             "hsl" => "https://en.wikipedia.org/wiki/HSL_and_HSV",
             "lab" => "https://en.wikipedia.org/wiki/CIELAB_color_space",
             "xyz" => "https://en.wikipedia.org/wiki/CIE_1931_color_space",
+            "lch" => "https://en.wikipedia.org/wiki/CIELAB_color_space#Cylindrical_representation:_CIELCh_or_CIEHLC",
             _ => "",
         }
         .to_string()
@@ -178,6 +183,7 @@ impl GameContext {
         impl_model!("hsl", slider_hsl);
         impl_model!("lab", slider_lab);
         impl_model!("xyz", slider_xyz);
+        impl_model!("lch", slider_lch);
         None
     }
 
@@ -195,19 +201,22 @@ impl GameContext {
 
         match reference {
             "srgb" => {
-                cross_propagate!(slider_srgb =>  slider_hsv, slider_hsl, slider_lab, slider_xyz);
+                cross_propagate!(slider_srgb =>  slider_hsv, slider_hsl, slider_lab, slider_xyz, slider_lch);
             }
             "hsv" => {
-                cross_propagate!(slider_hsv => slider_srgb, slider_hsl, slider_lab, slider_xyz);
+                cross_propagate!(slider_hsv => slider_srgb, slider_hsl, slider_lab, slider_xyz, slider_lch);
             }
             "hsl" => {
-                cross_propagate!(slider_hsl => slider_srgb, slider_hsv, slider_lab, slider_xyz);
+                cross_propagate!(slider_hsl => slider_srgb, slider_hsv, slider_lab, slider_xyz, slider_lch);
             }
             "lab" => {
-                cross_propagate!(slider_lab => slider_srgb, slider_hsv, slider_hsl, slider_xyz);
+                cross_propagate!(slider_lab => slider_srgb, slider_hsv, slider_hsl, slider_xyz, slider_lch);
             }
             "xyz" => {
-                cross_propagate!(slider_xyz => slider_srgb, slider_hsv, slider_hsl, slider_lab);
+                cross_propagate!(slider_xyz => slider_srgb, slider_hsv, slider_hsl, slider_lab, slider_lch);
+            }
+            "lch" => {
+                cross_propagate!(slider_lch => slider_srgb, slider_hsv, slider_hsl, slider_lab, slider_xyz);
             }
             _ => {}
         }
@@ -270,6 +279,16 @@ impl GameContext {
                         s.value = *v;
                     });
                 cross_propagate_one!(slider_xyz, slider_srgb);
+            }
+            "lch" => {
+                self.slider_lch
+                    .1
+                    .iter_mut()
+                    .zip(values.iter())
+                    .for_each(|(s, v)| {
+                        s.value = *v;
+                    });
+                cross_propagate_one!(slider_lch, slider_srgb);
             }
             _ => {}
         }

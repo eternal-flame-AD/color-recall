@@ -1,7 +1,7 @@
 use std::fmt::Display;
 
 use num_traits::{Num, NumCast};
-use palette::{color_difference::ImprovedCiede2000, Hsl, Hsv, IntoColor, Lab, Srgb, Xyz};
+use palette::{color_difference::ImprovedCiede2000, Hsl, Hsv, IntoColor, Lab, Lch, Srgb, Xyz};
 use rand::Rng;
 
 #[derive(Debug, Clone)]
@@ -344,6 +344,53 @@ impl ColorChooser<f32> for XYZChooser {
             Slider::new_linear("x", xyz.x, 0.0, 1.0),
             Slider::new_linear("y", xyz.y, 0.0, 1.0),
             Slider::new_linear("z", xyz.z, 0.0, 1.0),
+        ]
+        .into_boxed_slice()
+    }
+}
+
+#[derive(Default, Clone, Copy)]
+pub struct LCHChooser;
+
+impl ColorChooser<f32> for LCHChooser {
+    fn get_meta(&self) -> ColorSpaceMeta {
+        ColorSpaceMeta {
+            name: "CIELCH",
+            info_link: "https://en.wikipedia.org/wiki/CIELAB_color_space#Cylindrical_representation:_CIELCh_or_CIEHLC",
+            slider_names: &["Lightness", "Chroma", "Hue"],
+        }
+    }
+
+    fn init_sliders(&self) -> Box<[Slider<f32>]> {
+        vec![
+            Slider::new_linear("L", 50., 0.0, 100.0),
+            Slider::new_linear("C", 64., 0.0, 128.0),
+            Slider::new_linear("H", 180., 0.0, 360.0),
+        ]
+        .into_boxed_slice()
+    }
+
+    fn as_srgb(&self, sliders: &[Slider<f32>]) -> Srgb {
+        let lch = Lch::new(sliders[0].value, sliders[1].value, sliders[2].value);
+        lch.into_color()
+    }
+
+    fn compute_xyz(&self, sliders: &[Slider<f32>]) -> Xyz {
+        let lch = Lch::new(sliders[0].value, sliders[1].value, sliders[2].value);
+        lch.into_color()
+    }
+
+    fn compute_lab(&self, sliders: &[Slider<f32>]) -> Lab {
+        let lch = Lch::new(sliders[0].value, sliders[1].value, sliders[2].value);
+        lch.into_color()
+    }
+
+    fn from_srgb(srgb: Srgb) -> Box<[Slider<f32>]> {
+        let lch: Lch = srgb.into_color();
+        vec![
+            Slider::new_linear("L", lch.l, 0.0, 100.0),
+            Slider::new_linear("C", lch.chroma, 0.0, 128.0),
+            Slider::new_linear("H", lch.hue.into_positive_degrees(), 0.0, 360.0),
         ]
         .into_boxed_slice()
     }
