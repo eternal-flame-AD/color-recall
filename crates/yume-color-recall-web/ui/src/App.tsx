@@ -207,7 +207,7 @@ function Step3(props: {
                   return (
                     <Box key={`${model}-${slider.name}-${j}`}>
                       <Typography variant="body1">{slider.name}</Typography>
-                      <Stack spacing={2} sx={{ width: '20rem' }}>
+                      <Stack spacing={1} sx={{ width: '20rem' }}>
                         <Typography variant="body2">{slider.value}</Typography>
                         <Slider
                           value={slider.value}
@@ -245,7 +245,7 @@ function Step3(props: {
         }
       </Box>
 
-      <Divider sx={{ margin: 2 }} />
+      <Divider sx={{ margin: 1 }} />
       <NextBtn next={() => props.next(model_name(currentModel), +new Date() - beginRecall)} reset={props.reset} />
     </Box>
   )
@@ -294,11 +294,12 @@ function Step1(props: { next: () => void, reset: () => void }) {
       <Button variant="contained" onClick={() => setShowCalibration(!showCalibration)} sx={{ margin: 1 }}>
         {t('calibration_toggle')}
       </Button>
-      <Divider sx={{ margin: 2 }} />
+
       {
         showCalibration ?
           (
             <>
+              <Divider sx={{ margin: 2 }} />
               <RainbowScale size={150} />
               <Divider sx={{ margin: 2 }} />
               <GradientScale size={150} from={darken_target_color(-0.25)} to={darken_target_color(0.25)} />
@@ -306,7 +307,7 @@ function Step1(props: { next: () => void, reset: () => void }) {
           ) : null
       }
 
-      <Divider sx={{ margin: 2 }} />
+      <Divider sx={{ margin: 1 }} />
       <NextBtn next={props.next} reset={props.reset} />
     </Box>
   )
